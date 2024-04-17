@@ -19,5 +19,49 @@ This probing architecture was used by Tenny et al. (2019), not only to perform t
 # Formalization of the Probing Task	
 Within the surprise disambiguation model, there are two types of conflicts. The first type is the conflict between the punchline and the first more obvious interpretation of the set up. The second type is the conflict between the punchline and other more natural/expected predictions made by the viewer given the set-up.
 An example of a joke containing the first type of conflict:
->•	"Why do birds fly south in winter? It’s too far to walk." Ritchie (1999)<
+>•	"Why do birds fly south in winter? It’s too far to walk." Ritchie (1999)
+The second type of conflict can be observed in the following joke.
+>•	"Isn’t modern technology wonderful? I remember the excitement when we were the first family in our street to have cordless pyjamas. (Arnold Brown, early 1990s)" Ritchie (1999)
+In this study, we annotated the humorous texts by the type of conflicts they contain, and had this binary classification task as the probing task.
+This is a sentence level task, which we used the aforementioned GridLoc probing technique to investigate, on a token level, which tokens attracted the most attention across the layers, when performing this text sequence level task.  The GridLoc method enabled us to not only investigate whether this knowledge was present in the pretained NN, but also which tokens were the most important in making that classification.
+# Dataset
+There is not a readily available annotated dataset suitable for training the proposed probe. Therefore, we annotated the Short Jokes dataset (Moudgl. 2017), which contains 231,657 jokes, with varying length from 10 to 200 characters. This dataset was built by scraping the subreddits /r/jokes and /r/cleanjokes. The jokes were downloaded from the day of posting to 31st Jan, 2017. We reviewed the jokes with IDs from 1 to 1,487, and from 231,313 to 231,657, which is a total of 1,832 jokes. 
+We labeled the jokes by the types of conflict they contain as described in the earlier sections. The labels entail:
+  •	Type 0 - A joke, of which the punchline con- flicts with the first more obvious interpretation of the set-up.
+  •	Type 1 - A joke, of which the punchline con- flict with the viewer’s prediction of the punch- line given the setup.
+We determined that 189 jokes out of the re- viewed jokes contained the two types of conflicts (The annotators found the others are in general not very funny anyways). 80 belongs to Type 0; 109 belongs to Type 1. The class ratio between the conflict types is 0.73 (Type 0 /Type 1).
+The annotated dataset was processed into a text file with three columns per the input requirement by the GridLoc script, with the partitions ("tr" for training, "va" for validation, "te" for testing) in the first column, ground-truth classes in the second column, and the short jokes in the third column. The ratio between training, validation, and testing is 0.7, 0.15, and 0.15.
+Additionally, during the annotation, we also la- beled the important sequences. More concretely, for type 0 jokes, we labeled the set-up with two dif- ferent interpretations, and the punchline; for type 1 jokes, we labeled the punchline. This is not for training a second probe, but for the statistic testings we will discuss in more detail in later sections.
+# Method
+We employed a stock BERT model (Devlin et al. (2019)), "bert-base-uncased", as the pre-trained large language model. BERT, which is short for Bidirectional Encoder Representations from Transformers, was originally trained to predict the masked token given the rest of the contextual to- kens in the text sequence. The underlying assump- tion is that by having been trained on a large set of corpora, BERT extracted syntactic, and semantic features as its internal text representation, which we can harvest with the architecture of the probes to perform downstream tasks. We employed the GridLoc method in training the conflict-type probe classifier. During training, the parameters are initialized randomly. Due to the effect of randomness in the trained probe parameters, which in turn determines the weights, we performed training with 100 random seeds and performed statistic testings on the weights. We pooled the trained weights obtained with all random seeds for the statistical testings. With the labeling additional to the joke classes during annotation, we first grouped the tokens into the following six categories.
+  •	Group 1 - The rest of the tokens in type 1 jokes, all other tokens excluding punctuation 
+  •	Group 2 - Punchline tokens of type 1 jokes, the tokens within the punchline of type 1 jokes 
+  •	Group 3 - The rest of the tokens in type 0 jokes, all other tokens excluding punctuation 
+  •	Group 4 - Punchline tokens of type 0 jokes, the tokens within the punchline of type 0 jokes 
+  •	Group 5 - Set-up tokens of type 0 jokes, the tokens within the set-up with two interpretations in type 0 jokes
+To further illustrate the distinctions between group 1, 2, 3, 4, and 5, for example, in the type 0 joke, "Two guys walk into a bar. The third guy ducks.", tokens from "into a bar" are under group 5, the token of "ducks" is under group 4, and the ones from "Two guys walk", and "The third guy" are lumped into group 3; in the type 1 joke, "He was a real gentlemen and always opened the fridge door for me.", tokens of "fridge door" are under group 2, while the ones from "He was a real gentlemen and always opened the ", and "for me" are lumped under Group 1.
+We aimed to find the distributional difference between these five token groups, for which we employed the Mann-Whitney U test (Mann and Whitney (1947)). The Mann-Whitney U test is a nonparametric test with the null hypothesis being that by randomly generating a value X from distribution A, and a value Y from distribution B, the probability of X being greater than Y, is equal to the probability of the opposite. We also assigned binary importance to the tokens. We considered tokens in group 2, 4, and 5 important in classifying the conflict type the joke contains, which we gave an importance of 1. To- kens from Group 5 are considered relatively not as important, and were given an importance of 0. In order to study the correlation between the weights and the binary importance as labeled by the anno- tators, we employed the Point-Biserial test. The Point-Biserial test, which is a special case of Pear- son’s R test, was used to obtain a correlation co- efficient which measures the correlation between a dichotomous variable X, and a continuous vari- able Y. The coefficient was taken to prove or reject the null hypothesis of that there is not a significant correlation between X and Y.
+# Analysis
+# Mann-Whitney U Test
+Mann-Whitney U Test is used to study the distri- butional difference between the token weights of each groups. Five categories of tokens are collected through the following procedures:
+  •	Gather attention weight matrices for 28 testing sentences using 100 different seeds during training initialization.
+  •	Consolidate the attention weights from the last layer for each testing sentence and store them in a data frame (the data frame’s dimensions should be 100× the number of tokens in a sentence).
+  •	Classify tokens in a sentence into five categories based on the index of important sequence labeling.
+  •	Store five categories of attention weights into five arrays and ready for statistical testing.
+Based on the Mann-Whitney U statistical test, the comparison results across all groups are found to be statistically significant. This provides strong evidence to reject the null hypothesis, suggesting that there is indeed a difference between the two tested groups. Moreover, differences within each type of joke are even more pronounced.
+Specifically, the test results indicate a low p- value between groups 1 and 2 (both from Type 1 jokes). This suggests that pre-trained Language Models (LLMs) exhibit varying levels of atten- tion based on the importance of tokens in a joke. The significance of this difference underscores the
 
+| Groups | P-value            | Significant |
+|--------|--------------------|-------------|
+| 1 vs 2 | 8.702895 × 10⁻⁷⁷  | True        |
+| 1 vs 3 | 2.925829 × 10⁻¹⁰  | True        |
+| 1 vs 4 | 5.451308 × 10⁻⁴   | True        |
+| 1 vs 5 | 8.422516 × 10⁻³   | True        |
+| 2 vs 3 | 3.965515 × 10⁻⁵⁷  | True        |
+| 2 vs 4 | 5.524734 × 10⁻⁴²  | True        |
+| 2 vs 5 | 2.906200 × 10⁻²³  | True        |
+| 3 vs 4 | 4.800479 × 10⁻¹⁸  | True        |
+| 3 vs 5 | 3.496586 × 10⁻²   | True        |
+| 4 vs 5 | 1.059500 × 10⁻⁵   | True        |
+
+Table 1: Mann-Whitney U Statistical Comparison
