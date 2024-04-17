@@ -49,19 +49,65 @@ Mann-Whitney U Test is used to study the distri- butional difference between the
   •	Classify tokens in a sentence into five categories based on the index of important sequence labeling.
   •	Store five categories of attention weights into five arrays and ready for statistical testing.
 Based on the Mann-Whitney U statistical test, the comparison results across all groups are found to be statistically significant. This provides strong evidence to reject the null hypothesis, suggesting that there is indeed a difference between the two tested groups. Moreover, differences within each type of joke are even more pronounced.
-Specifically, the test results indicate a low p- value between groups 1 and 2 (both from Type 1 jokes). This suggests that pre-trained Language Models (LLMs) exhibit varying levels of atten- tion based on the importance of tokens in a joke. The significance of this difference underscores the
+Specifically, the test results indicate a low p- value between groups 1 and 2 (both from Type 1 jokes). This suggests that pre-trained Language Models (LLMs) exhibit varying levels of atten- tion based on the importance of tokens in a joke. The significance of this difference underscores the model’s ability to discriminate between token importance.
+However, the test result between groups 3 and 5(both from Type 0 jokes)shows a higher p-value, approaching the 0.05 threshold for rejection. This may be attributed to the unique characteristics of the set-up category and the non-punchline category. Notably, most set-up tokens are either surrounded by or could be perceived as part of non-punchline tokens. This intricacy in token association may contribute to the less decisive test outcome for group 5.
 
-| Groups | P-value            | Significant |
-|--------|--------------------|-------------|
-| 1 vs 2 | 8.702895 × 10⁻⁷⁷  | True        |
-| 1 vs 3 | 2.925829 × 10⁻¹⁰  | True        |
-| 1 vs 4 | 5.451308 × 10⁻⁴   | True        |
-| 1 vs 5 | 8.422516 × 10⁻³   | True        |
-| 2 vs 3 | 3.965515 × 10⁻⁵⁷  | True        |
-| 2 vs 4 | 5.524734 × 10⁻⁴²  | True        |
-| 2 vs 5 | 2.906200 × 10⁻²³  | True        |
-| 3 vs 4 | 4.800479 × 10⁻¹⁸  | True        |
-| 3 vs 5 | 3.496586 × 10⁻²   | True        |
-| 4 vs 5 | 1.059500 × 10⁻⁵   | True        |
+<div align="center">
+  <b>Table 1: Mann-Whitney U Statistical Comparison</b>
 
-Table 1: Mann-Whitney U Statistical Comparison
+  | Groups | P-value            | Significant |
+  |--------|--------------------|-------------|
+  | 1 vs 2 | 8.702895 × 10⁻⁷⁷  | True        |
+  | 1 vs 3 | 2.925829 × 10⁻¹⁰  | True        |
+  | 1 vs 4 | 5.451308 × 10⁻⁴   | True        |
+  | 1 vs 5 | 8.422516 × 10⁻³   | True        |
+  | 2 vs 3 | 3.965515 × 10⁻⁵⁷  | True        |
+  | 2 vs 4 | 5.524734 × 10⁻⁴²  | True        |
+  | 2 vs 5 | 2.906200 × 10⁻²³  | True        |
+  | 3 vs 4 | 4.800479 × 10⁻¹⁸  | True        |
+  | 3 vs 5 | 3.496586 × 10⁻²   | True        |
+  | 4 vs 5 | 1.059500 × 10⁻⁵   | True        |
+</div>
+
+## Point-Biserial Correlation Coefficient
+
+The point-Biserial Correlation Coefficient is used to study the strength and direction of the association between important token weights and regular token weights.
+  •	Important tokens: Group 2, 4, and 5 tokens
+  •	regular tokens: Group 1 an 3 tokens
+  •	Array 1: Containing all token weights from all groups
+  •	Array 2: Binary array where elements from important tokens are encoded in 1 and the rest as 0.
+Point-Biserial Correlation Coefficient is measured between Array 1 and 2, with a coefficient of −0.0759, and a P-value of 2.3310−85. The test result and P-value suggest we have strong evidence to reject the null hypothesis that there is no correlation between two arrays. However, the coefficient is close to 0 which implies the correlation between the importance of a token and the attention weight is weak. A negative coefficient indicates a negative relationship between the importance of token and attention weight, a token with a higher value of attention weight tends to be a regular token.
+
+## Testing accuracy
+
+The pre-trained LLM achieved a median testing accuracy of 0.828 with a standard deviation of 0.194. Considering the relatively small training sample size, the model performs well in test ac- curacy. However, the standard deviation is higher than the expectation due to the limitation of train- ing size. In general, the pre-trained LLM is capable of classifying Type 0 and Type 1 jokes as expected. The internal representation from pre-trained LLM contains hidden semantic and synthetic features that can be used to classify different types of jokes. The statistical result from the probing task supports our assumption that hidden semantic and synthetic features are used to classify jokes.
+
+# Conclusion and Limitations
+
+In this study, we performed literature review in in- vestigation of existing linguistic humor models, and probing techniques, and established a new probing task of conflict-type classification.
+To train the probe, we reviewed and labeled a portion of the short joke data set.
+We adopted the GridLoc probing method, and trained a probe classifier based on the pre- trained LLM, BERT, more specifically "bert-base- uncased". The median test accuracy was 0.828, with a standard deviation of 0.194, considering the 100 randomized training instances.
+Additionally, we performed Mann-Whitney U tests, and rejected all pair-wise null hypotheses, which means significant distributional differences were found between all token groups as expected. We also performed point-biserial tests and found significant correlation between the weights and the
+binary importance of the tokens.
+Some limitations of this study include:
+  •	Human annotation is subject to subjectivity even with adequate annotating specifications. There are only two annotators, whose perspec- tive and therefore conclusions on the conflict types can be highly biased. To reduce the bias, a bigger group of annotators may be em- ployed.
+  •	Although the annotators were able to review a total of 1,832 joke, only approximately 10 percent of the reviewed jokes were suitable for this probing task of interest. This could lead to over fitting on the training data.
+  •	Due to time constraints, this study used a stock BERT model. Ideally, BERT should be trained on a suitable large data set to perform a humorous text detection task before its parameters are frozen for the probe training. This could potentially improve the performance of the probe classifier in the test and validation accuracy, as well as alter the distributional differences between the token groups and the level of correlation between the weights and binary importance.
+
+# References
+
+Alexis Conneau, German Kruszewski, Guillaume Lample, Loic Barrault, and Marco Baroni. 2018. What you can cram into a single vector: Probing sentence embeddings for linguistic properties. arXiv preprint arXiv:1805.01070.	
+Jacob Devlin, Ming-Wei Chang, Kenton Lee, and Kristina Toutanova. 2019. BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding. In Proceedings of the 2019 Conference of the North American Chapter of the Association for Computational Linguistics (NAACL), pages 4171–4186.
+Md  Kamrul  Hasan,  Wasifur  Rahman,  AmirAli Bagher Zadeh, Jianyuan Zhong, Md Iftekhar Tanveer, Louis-Philippe Morency, and Mohammed (Ehsan) Hoque. 2019. UR-FUNNY: A multimodal language dataset for understanding humor. In Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing and the 9th International Joint Conference on Natural Language Processing (EMNLP-IJCNLP), pages 2046–2056, Hong Kong, China. Association for Computational Linguistics.
+Henry B. Mann and Donald R. Whitney. 1947. On a test of whether one of two random variables is stochastically larger than the other. Annals of Mathematical Statistics, 18(1):50–60.
+Marvin Minsky. 1984. Jokes and the Logic of the Cognitive Unconscious, pages 175–200. Springer Netherlands, Dordrecht.
+Abhinav Moudgl. 2017. Short jokes dataset. https://github.com/amoudgl/short-jokes-dataset. Accessed: [Nov 10, 2023].
+Jingcheng Niu, Wenjie Lu, and Gerald Penn. 2022. Does BERT rediscover a classical NLP pipeline? In Proceedings of the 29th International Conference on Computational Linguistics, pages 3143–3153, Gyeongju, Republic of Korea. International Committee on Computational Linguistics.
+John Allen Paulos. 1980. Mathematics and Humor.
+Matthew E. Peters, Mark Neumann, Mohit Iyyer, Matt Gardner, Christopher Clark, Kenton Lee, and Luke	Zettlemoyer. 2018. Deep contextualized word representations. In Proceedings of the 2018 Conference of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies, Volume 1 (Long Papers), pages 2227–2237, New Orleans, Louisiana. Association for Computational Linguistics.
+Graeme Ritchie. 1999.  Developing the incongruity-resolution theory. Technical report.
+Thomas R. Shultz. 1974. Development of the appreciation of riddles. Child Development, 45(1):100–105.
+Jerry M. Suls. 1972. Chapter 4 – a two-stage model for the appreciation of jokes and cartoons:  An information-processing analysis.
+Ian Tenny, Dipanjan Das, and Ellie Pavlick. 2019. Bert rediscovers the classical nlp pipeline. Proceedings of the 57th Annual Meeting of the Association for Computational Linguistics, arXiv:1905.05950v2. Version 2.
+Orion Weller and Kevin Seppi. 2019. Humor detection: A transformer gets the last laugh. In Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing and the 9th International Joint Conference on Natural Language Processing (EMNLP-IJCNLP), pages 3621–3625, Hong Kong, China. Association for Computational Linguistics.
+
