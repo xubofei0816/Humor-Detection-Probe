@@ -97,17 +97,30 @@ Some limitations of this study include:
 # References
 
 Alexis Conneau, German Kruszewski, Guillaume Lample, Loic Barrault, and Marco Baroni. 2018. What you can cram into a single vector: Probing sentence embeddings for linguistic properties. arXiv preprint arXiv:1805.01070.	
+
 Jacob Devlin, Ming-Wei Chang, Kenton Lee, and Kristina Toutanova. 2019. BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding. In Proceedings of the 2019 Conference of the North American Chapter of the Association for Computational Linguistics (NAACL), pages 4171–4186.
+
 Md  Kamrul  Hasan,  Wasifur  Rahman,  AmirAli Bagher Zadeh, Jianyuan Zhong, Md Iftekhar Tanveer, Louis-Philippe Morency, and Mohammed (Ehsan) Hoque. 2019. UR-FUNNY: A multimodal language dataset for understanding humor. In Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing and the 9th International Joint Conference on Natural Language Processing (EMNLP-IJCNLP), pages 2046–2056, Hong Kong, China. Association for Computational Linguistics.
+
 Henry B. Mann and Donald R. Whitney. 1947. On a test of whether one of two random variables is stochastically larger than the other. Annals of Mathematical Statistics, 18(1):50–60.
+
 Marvin Minsky. 1984. Jokes and the Logic of the Cognitive Unconscious, pages 175–200. Springer Netherlands, Dordrecht.
+
 Abhinav Moudgl. 2017. Short jokes dataset. https://github.com/amoudgl/short-jokes-dataset. Accessed: [Nov 10, 2023].
+
 Jingcheng Niu, Wenjie Lu, and Gerald Penn. 2022. Does BERT rediscover a classical NLP pipeline? In Proceedings of the 29th International Conference on Computational Linguistics, pages 3143–3153, Gyeongju, Republic of Korea. International Committee on Computational Linguistics.
+
 John Allen Paulos. 1980. Mathematics and Humor.
+
 Matthew E. Peters, Mark Neumann, Mohit Iyyer, Matt Gardner, Christopher Clark, Kenton Lee, and Luke	Zettlemoyer. 2018. Deep contextualized word representations. In Proceedings of the 2018 Conference of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies, Volume 1 (Long Papers), pages 2227–2237, New Orleans, Louisiana. Association for Computational Linguistics.
+
 Graeme Ritchie. 1999.  Developing the incongruity-resolution theory. Technical report.
+
 Thomas R. Shultz. 1974. Development of the appreciation of riddles. Child Development, 45(1):100–105.
+
 Jerry M. Suls. 1972. Chapter 4 – a two-stage model for the appreciation of jokes and cartoons:  An information-processing analysis.
+
 Ian Tenny, Dipanjan Das, and Ellie Pavlick. 2019. Bert rediscovers the classical nlp pipeline. Proceedings of the 57th Annual Meeting of the Association for Computational Linguistics, arXiv:1905.05950v2. Version 2.
+
 Orion Weller and Kevin Seppi. 2019. Humor detection: A transformer gets the last laugh. In Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing and the 9th International Joint Conference on Natural Language Processing (EMNLP-IJCNLP), pages 3621–3625, Hong Kong, China. Association for Computational Linguistics.
 
